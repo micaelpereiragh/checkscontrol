@@ -1,13 +1,13 @@
-package com.api.checkscontrol;
+package com.api.checkpaymentcontrol;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CheckscontrolApplication {
+public class ChecksControlApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CheckscontrolApplication.class, args);
+		SpringApplication.run(ChecksControlApplication.class, args);
 	}
 
 }

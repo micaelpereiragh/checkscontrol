@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,18 +40,6 @@ public class CustomerController {
     return ResponseEntity.ok(customerService.getCustomerById(id));
   }
 
-//  @GetMapping("/api/{name}")
-//  public ResponseEntity<List<CustomerDto>> getCustomerByName(@PathVariable String name) {
-//    System.out.println(name);
-//    return ResponseEntity.ok(customerService.getCustomerByName(name));
-//  }
-
-//  @GetMapping("/api")
-//  public ResponseEntity<List<CustomerDto>> getCustomerByName1(@RequestParam String name) {
-//    System.out.println(name);
-//    return ResponseEntity.ok(customerService.getCustomerByName(name));
-//  }
-
   @GetMapping(params = "name")
   public ResponseEntity<List<CustomerDto>> getCustomerByName1(@RequestParam String name) {
     System.out.println(name);
@@ -61,6 +50,13 @@ public class CustomerController {
   public ResponseEntity<CustomerDto> addNewAuthor(@Valid @RequestBody CustomerDto customerDto) {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(customerService.addNewCustomer(customerDto));
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<CustomerDto> updateAuthor(@Valid @RequestBody CustomerDto customerDto,
+      @PathVariable UUID id) {
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(customerService.replaceAuthor(id, customerDto));
   }
 
 }

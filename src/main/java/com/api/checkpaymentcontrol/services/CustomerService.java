@@ -20,14 +20,13 @@ public class CustomerService {
   @Autowired
   CustomerMapper customerMapper;
 
+
   public List<CustomerDto> getAllCustomers() {
     return customerMapper.customerToCustomerDto(customerRepository.findAll());
   }
 
   public CustomerDto getCustomerById(final UUID id) {
-    Customer customer = customerRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Customer not found"));
-
+    Customer customer = findByIdOrThrowException(id);
     return customerMapper.customerToCustomerDto(customer);
   }
 
@@ -37,10 +36,30 @@ public class CustomerService {
     return customerMapper.customerToCustomerDto(customer);
   }
 
+  @Transactional
   public CustomerDto addNewCustomer(final CustomerDto customerDto) {
     return customerMapper.customerToCustomerDto(
         customerRepository.save(customerMapper.CustomerDtoToCustomer(customerDto)));
   }
 
+  @Transactional
+  public CustomerDto replaceAuthor(final UUID id, final CustomerDto customerDto) {
+    return customerMapper.customerToCustomerDto(customerRepository.findById(id)
+        .map(customer -> {
+              customer.setName(customerDto.getName());
+              customer.setEmail(customerDto.getEmail());
+              return customerRepository.save(customer);
+            })
+        .orElseGet(() -> {
+          Customer customer = customerMapper.CustomerDtoToCustomer(customerDto);
+          customer.setCustomerId(id);
+          return customerRepository.save(customer);
+        }));
+  }
 
+  private Customer findByIdOrThrowException(final UUID id) {
+    return customerRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+  }
 }

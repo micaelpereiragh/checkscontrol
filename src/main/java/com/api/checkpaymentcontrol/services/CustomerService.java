@@ -42,24 +42,28 @@ public class CustomerService {
         customerRepository.save(customerMapper.CustomerDtoToCustomer(customerDto)));
   }
 
+  //TODO: entender como funcionaria o update de stores ou checks
   @Transactional
   public CustomerDto replaceAuthor(final UUID id, final CustomerDto customerDto) {
     return customerMapper.customerToCustomerDto(customerRepository.findById(id)
         .map(customer -> {
               customer.setName(customerDto.getName());
               customer.setEmail(customerDto.getEmail());
+              customer.setAddress(customerDto.getAddress());
+              customer.setNotes(customerDto.getNotes());
+              customer.setPhoneNumber(customerDto.getPhoneNumber());
               return customerRepository.save(customer);
             })
-        .orElseGet(() -> {
-          Customer customer = customerMapper.CustomerDtoToCustomer(customerDto);
-          customer.setCustomerId(id);
-          return customerRepository.save(customer);
-        }));
+        .orElseThrow(() -> new RuntimeException("Customer not found")));
   }
 
   private Customer findByIdOrThrowException(final UUID id) {
     return customerRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Customer not found"));
 
+  }
+
+  public void deleteCustomer(UUID id) {
+    customerRepository.delete(findByIdOrThrowException(id));
   }
 }

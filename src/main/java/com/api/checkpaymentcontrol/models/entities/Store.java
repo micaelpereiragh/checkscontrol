@@ -15,11 +15,13 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SoftDelete;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor
+@SoftDelete
 @Table(name = "store")
 public class Store extends BaseEntity implements Serializable {
 

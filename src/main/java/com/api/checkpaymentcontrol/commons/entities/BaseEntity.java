@@ -21,7 +21,4 @@ public class BaseEntity implements Serializable {
   @Column(name = "updated_at", nullable = false)
   @UpdateTimestamp
   private Instant updatedAt;
-
-  @Column(name = "deleted_at")
-  private Instant deletedAt;
 }

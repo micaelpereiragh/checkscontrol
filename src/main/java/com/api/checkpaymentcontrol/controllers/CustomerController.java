@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,22 +42,27 @@ public class CustomerController {
   }
 
   @GetMapping(params = "name")
-  public ResponseEntity<List<CustomerDto>> getCustomerByName1(@RequestParam String name) {
+  public ResponseEntity<List<CustomerDto>> getCustomerByName(@RequestParam String name) {
     System.out.println(name);
     return ResponseEntity.ok(customerService.getCustomerByName(name));
   }
 
   @PostMapping
-  public ResponseEntity<CustomerDto> addNewAuthor(@Valid @RequestBody CustomerDto customerDto) {
+  public ResponseEntity<CustomerDto> addNewCustomer(@Valid @RequestBody CustomerDto customerDto) {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(customerService.addNewCustomer(customerDto));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<CustomerDto> updateAuthor(@Valid @RequestBody CustomerDto customerDto,
+  public ResponseEntity<CustomerDto> updateCustomer(@Valid @RequestBody CustomerDto customerDto,
       @PathVariable UUID id) {
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(customerService.replaceAuthor(id, customerDto));
+    return ResponseEntity.ok(customerService.replaceAuthor(id, customerDto));
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<String> deleteCustomer(@PathVariable UUID id){
+    customerService.deleteCustomer(id);
+    return ResponseEntity.ok().build();
   }
 
 }
